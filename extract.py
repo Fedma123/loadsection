@@ -14,7 +14,7 @@ def extract_section_from_file_given_jupyter_line(line):
     filename = args[1]
 
     lines = []
-    extracted_lines = ""
+    extracted_lines = []
     inside_wanted_section = False
     with open(filename, "r") as f:
         lines = f.readlines()
@@ -28,9 +28,28 @@ def extract_section_from_file_given_jupyter_line(line):
             break
         
         if inside_wanted_section:
-            extracted_lines += current_line
+            extracted_lines.append(current_line)
 
     if inside_wanted_section:
         raise exceptions.MissingEndOfSection(section)
+
+    min_indentation_among_lines = 0xFFFFFFFF    
+    for line in extracted_lines:
+        stripped_line = line.lstrip(" \t")
+        current_line_indentation = len(line) - len(stripped_line)
+
+        if current_line_indentation < min_indentation_among_lines:
+            min_indentation_among_lines = current_line_indentation
         
-    return extracted_lines
+        if current_line_indentation == 0:
+            break
+
+    result = ""
+    if min_indentation_among_lines == 0:
+        good_lines = extracted_lines
+    else:
+        good_lines = []
+        for line_to_strip in extracted_lines:
+            good_lines.append(line_to_strip[min_indentation_among_lines:])
+
+    return str().join(good_lines)

@@ -35,11 +35,23 @@ class CorrectFileContentWithOneSection:
     # SECTION 1 END"""
 
     expected_sections = {
-        "1": """    line in between 1
-    line in between 2\n"""
+        "1": """line in between 1
+line in between 2\n"""
     }
         
-    
+class CorrectFileContentWithDifferentIndentation:
+    raw_content =  """
+    This is a line above the section
+    # SECTION ind BEGIN
+    line in between 1
+        line in between 2 more indented
+    # SECTION ind END"""
+
+    expected_sections = {
+        "ind": """line in between 1
+    line in between 2 more indented\n"""
+    }
+
 class CorrectFileContentWithTwoSections:    
     raw_content = """
     This is a line above the section
@@ -55,11 +67,11 @@ class CorrectFileContentWithTwoSections:
     """
 
     expected_sections = {
-        "alpha": """    line 1 in alpha section
-    line 2 in alpha section\n""",
+        "alpha": """line 1 in alpha section
+line 2 in alpha section\n""",
 
-        "beta":  """    line 1 in beta section
-    line 2 in beta section\n"""
+        "beta":  """line 1 in beta section
+line 2 in beta section\n"""
     }
 
 class Test_Extract(unittest.TestCase):
@@ -91,6 +103,10 @@ class Test_Extract(unittest.TestCase):
         ("empty", "some_empty_section_file.py",
          CorrectFileContentWithEmptySection.raw_content,
          CorrectFileContentWithEmptySection.expected_sections["empty"]
+        ),
+        ("ind", "some_ind_file.py",
+         CorrectFileContentWithDifferentIndentation.raw_content,
+         CorrectFileContentWithDifferentIndentation.expected_sections["ind"]
         )
     ])
     def test_if_file_has_specified_section_then_returns_lines_in_between(self, section, file_name, raw, expected):
@@ -99,7 +115,6 @@ class Test_Extract(unittest.TestCase):
         jupyter_line = section + " " + file_name
         with unittest.mock.patch('builtins.open', m) as mp:            
             result = extract_section_from_file_given_jupyter_line(jupyter_line)
-
         self.assertEqual(result, expected)
 
     def test_if_file_does_not_have_end_of_section_then_raises_missing_end_of_section(self):
