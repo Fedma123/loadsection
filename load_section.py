@@ -10,5 +10,8 @@ class MyMagics(Magics):
         extracted_lines = extract_section_from_file_given_jupyter_line(line)
         self.shell.set_next_input('# %loadsection {}\n{}'.format(line, extracted_lines), replace=True)
 
-ip = get_ipython()
-ip.register_magics(MyMagics)
+def load_ipython_extension(ipython):
+    """This function is called when the extension is
+    loaded. It accepts an IPython InteractiveShell
+    instance."""
+    ipython.register_magics(MyMagics)

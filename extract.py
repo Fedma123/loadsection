@@ -44,12 +44,14 @@ def extract_section_from_file_given_jupyter_line(line):
         if current_line_indentation == 0:
             break
 
-    result = ""
     if min_indentation_among_lines == 0:
         good_lines = extracted_lines
     else:
         good_lines = []
         for line_to_strip in extracted_lines:
             good_lines.append(line_to_strip[min_indentation_among_lines:])
+
+    if len(good_lines) > 0 and good_lines[len(good_lines) - 1][-1] == '\n':
+        good_lines[len(good_lines) - 1] = good_lines[len(good_lines) - 1][:-1]
 
     return str().join(good_lines)

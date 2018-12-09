@@ -36,7 +36,7 @@ class CorrectFileContentWithOneSection:
 
     expected_sections = {
         "1": """line in between 1
-line in between 2\n"""
+line in between 2"""
     }
         
 class CorrectFileContentWithDifferentIndentation:
@@ -49,7 +49,7 @@ class CorrectFileContentWithDifferentIndentation:
 
     expected_sections = {
         "ind": """line in between 1
-    line in between 2 more indented\n"""
+    line in between 2 more indented"""
     }
 
 class CorrectFileContentWithTwoSections:    
@@ -68,10 +68,10 @@ class CorrectFileContentWithTwoSections:
 
     expected_sections = {
         "alpha": """line 1 in alpha section
-line 2 in alpha section\n""",
+line 2 in alpha section""",
 
         "beta":  """line 1 in beta section
-line 2 in beta section\n"""
+line 2 in beta section"""
     }
 
 class Test_Extract(unittest.TestCase):
